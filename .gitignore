@@ -1,0 +1,14 @@
+models/
+plots/
+
+.DS_Store
+__pycache__/
+*.pyc
+
+out/
+
+2_data_produced/*
+!2_data_produced/.gitkeep
+
+3_data_visualization/*
+!3_data_visualization/.gitkeep

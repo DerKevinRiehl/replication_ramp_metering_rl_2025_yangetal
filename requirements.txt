@@ -1,0 +1,7 @@
+matplotlib>=3.6
+numpy>=1.23
+pandas>=1.5
+seaborn>=0.12
+torch>=2.0
+tqdm>=4.64
+traci>=1.18

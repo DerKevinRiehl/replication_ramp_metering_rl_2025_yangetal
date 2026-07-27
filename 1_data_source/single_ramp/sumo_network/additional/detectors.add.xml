@@ -1,0 +1,40 @@
+<additional>
+    <inductionLoop id="det_main_arr_0" lane="edge_mainline_0" pos="10" freq="15" file="NUL"/>
+    <inductionLoop id="det_main_arr_1" lane="edge_mainline_1" pos="10" freq="15" file="NUL"/>
+    <inductionLoop id="det_main_arr_2" lane="edge_mainline_2" pos="10" freq="15" file="NUL"/>
+    <inductionLoop id="det_main_arr_3" lane="edge_mainline_3" pos="10" freq="15" file="NUL"/>
+
+    <inductionLoop id="det_upstream_0" lane="edge_mainline_0" pos="100" freq="15" file="NUL"/>
+    <inductionLoop id="det_upstream_1" lane="edge_mainline_1" pos="100" freq="15" file="NUL"/>
+    <inductionLoop id="det_upstream_2" lane="edge_mainline_2" pos="100" freq="15" file="NUL"/>
+    <inductionLoop id="det_upstream_3" lane="edge_mainline_3" pos="100" freq="15" file="NUL"/>
+
+    <inductionLoop id="det_pre_merge_0" lane="edge_mainline_0" pos="720" freq="15" file="NUL"/>
+    <inductionLoop id="det_pre_merge_1" lane="edge_mainline_1" pos="720" freq="15" file="NUL"/>
+    <inductionLoop id="det_pre_merge_2" lane="edge_mainline_2" pos="720" freq="15" file="NUL"/>
+    <inductionLoop id="det_pre_merge_3" lane="edge_mainline_3" pos="720" freq="15" file="NUL"/>
+
+    <inductionLoop id="det_ramp_arr_0" lane="edge_ramp_2_0" pos="10" freq="15" file="NUL"/>
+    <inductionLoop id="det_ramp_arr_1" lane="edge_ramp_2_1" pos="10" freq="15" file="NUL"/>
+
+    <inductionLoop id="det_ramp_dep_0" lane="edge_ramp_2_0" pos="130" freq="15" file="NUL"/>
+    <inductionLoop id="det_ramp_dep_1" lane="edge_ramp_2_1" pos="130" freq="15" file="NUL"/>
+
+    <laneAreaDetector id="det_ramp_queue_0" lane="edge_ramp_2_0" pos="0" length="140" freq="15" file="NUL"/>
+    <laneAreaDetector id="det_ramp_queue_1" lane="edge_ramp_2_1" pos="0" length="140" freq="15" file="NUL"/>
+
+    <inductionLoop id="det_loc1_1" lane="edge_merge_1" pos="15" freq="15" file="NUL"/>
+    <inductionLoop id="det_loc1_2" lane="edge_merge_2" pos="15" freq="15" file="NUL"/>
+    <inductionLoop id="det_loc1_3" lane="edge_merge_3" pos="15" freq="15" file="NUL"/>
+    <inductionLoop id="det_loc1_4" lane="edge_merge_4" pos="15" freq="15" file="NUL"/>
+
+    <inductionLoop id="det_loc2_0" lane="edge_downstream_0" pos="175" freq="15" file="NUL"/>
+    <inductionLoop id="det_loc2_1" lane="edge_downstream_1" pos="175" freq="15" file="NUL"/>
+    <inductionLoop id="det_loc2_2" lane="edge_downstream_2" pos="175" freq="15" file="NUL"/>
+    <inductionLoop id="det_loc2_3" lane="edge_downstream_3" pos="175" freq="15" file="NUL"/>
+
+    <inductionLoop id="det_loc3_0" lane="edge_downstream_0" pos="425" freq="15" file="NUL"/>
+    <inductionLoop id="det_loc3_1" lane="edge_downstream_1" pos="425" freq="15" file="NUL"/>
+    <inductionLoop id="det_loc3_2" lane="edge_downstream_2" pos="425" freq="15" file="NUL"/>
+    <inductionLoop id="det_loc3_3" lane="edge_downstream_3" pos="425" freq="15" file="NUL"/>
+</additional>
