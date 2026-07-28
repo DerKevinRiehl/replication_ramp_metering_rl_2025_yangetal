@@ -16,7 +16,7 @@ class NoControlBaseline(BaseController):
         return 1.0, None, None, None, None, [False, None]  # 100% green ratio
 
 class PiAlineaController(BaseController):
-    def __init__(self, target_occ=13.0, k_r=90.0, k_p=10.0, min_ratio=0.1, max_ratio=1.0, sim_steps_per_control=15.0):
+    def __init__(self, target_occ=14.0, k_r=90.0, k_p=10.0, min_ratio=0.1, max_ratio=1.0, sim_steps_per_control=15.0):
         self.target_occ = target_occ
         self.k_r = k_r/1930
         self.k_p = k_p/1930

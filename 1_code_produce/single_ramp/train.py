@@ -128,14 +128,18 @@ def train(use_replacement, seed, num_episodes, dynamic_norm):
             fig_reward.savefig(os.path.join("plots", f"rewards_episode{episode}.png"))
             plt.close(fig_reward)
 
-            torch.save(agent.state_dict(), os.path.join(MODELS_DIR, f"model_{file_prefix}_ep{episode}.pth"))
-            with open(os.path.join(MODELS_DIR, f"state_tracker_{file_prefix}_ep{episode}.pkl"), "wb") as f:
+            torch.save(agent.state_dict(), os.path.join(MODELS_DIR, f"model_{file_prefix}_seed{seed}_ep{episode}.pth"))
+            with open(os.path.join(MODELS_DIR, f"state_tracker_{file_prefix}_seed{seed}_ep{episode}.pkl"), "wb") as f:
                 pickle.dump(state_tracker, f)
 
-    # Save final model and tracker
-    torch.save(agent.state_dict(), os.path.join(MODELS_DIR, f"model_{file_prefix}.pth"))
-    with open(os.path.join(MODELS_DIR, f"state_tracker_{file_prefix}.pkl"), "wb") as f:
+    # Save seed-specific artifacts so parallel multi-seed runs do not overwrite each other.
+    torch.save(agent.state_dict(), os.path.join(MODELS_DIR, f"model_{file_prefix}_seed{seed}.pth"))
+    with open(os.path.join(MODELS_DIR, f"state_tracker_{file_prefix}_seed{seed}.pkl"), "wb") as f:
         pickle.dump(state_tracker, f)
+    if seed == 42:
+        torch.save(agent.state_dict(), os.path.join(MODELS_DIR, f"model_{file_prefix}.pth"))
+        with open(os.path.join(MODELS_DIR, f"state_tracker_{file_prefix}.pkl"), "wb") as f:
+            pickle.dump(state_tracker, f)
 
     # Save final metrics
     with open(os.path.join(MODELS_DIR, f"training_history_{file_prefix}_seed{seed}.pkl"), "wb") as f:
@@ -153,7 +157,7 @@ if __name__ == "__main__":
     parser.add_argument("--use_replacement", action="store_true")
     parser.add_argument("--dynamic_norm", action="store_true")
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--num_episodes", type=int, default=300)
+    parser.add_argument("--num_episodes", type=int, default=500)
     args = parser.parse_args()
 
     random.seed(args.seed)

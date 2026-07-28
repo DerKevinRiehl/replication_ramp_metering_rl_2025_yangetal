@@ -6,8 +6,7 @@ as the reference ensures that the RL reward is clearly positive when the
 agent outperforms doing nothing, and negative when it makes things worse.
 
 Outputs:
-    MAX_TTS     -- 95th-percentile single-step TTS across all no-control
-                   seeds (robust upper bound, avoids single-step outliers)
+    MAX_TTS     -- maximum single-step TTS across all no-control seeds
     AVG_TTS     -- mean single-step TTS across all no-control seeds
                    (reward normalisation constant)
     STATE_MEANS / STATE_STDS -- paste into config.py
@@ -101,7 +100,7 @@ if __name__ == "__main__":
     all_tts = np.concatenate(all_tts)
     all_states = np.concatenate(all_states, axis=0)
 
-    max_tts = float(np.percentile(all_tts, 95))
+    max_tts = float(np.max(all_tts))
     avg_tts = float(np.mean(all_tts))
 
     means = np.mean(all_states, axis=0)
@@ -109,7 +108,7 @@ if __name__ == "__main__":
     stds[stds == 0] = 1e-8
 
     print("\n--- Calibration Results ---")
-    print(f"MAX_TTS (95th-pct, no-control): {max_tts:.2f}")
+    print(f"MAX_TTS (maximum,  no-control): {max_tts:.2f}")
     print(f"AVG_TTS (mean,     no-control): {avg_tts:.2f}")
     print(f"Ratio MAX/AVG: {max_tts/avg_tts:.3f}")
     print(f"\nSTATE_MEANS ({len(means)}-dim):")

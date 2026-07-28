@@ -6,12 +6,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import concurrent.futures
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+MULTI_RAMP_DIR = os.path.dirname(os.path.abspath(__file__))
+CODE_DIR = os.path.dirname(MULTI_RAMP_DIR)
+sys.path.insert(0, MULTI_RAMP_DIR)
+sys.path.insert(0, CODE_DIR)
 
 from config import MODELS_DIR
 
-SEEDS = np.arange(2)
+SEEDS = np.arange(10)
 
 def run_single_experiment(args):
     seed, use_replacement, dynamic_norm = args
@@ -19,14 +21,24 @@ def run_single_experiment(args):
     norm_tag = "dynamic" if dynamic_norm else "static"
     print(f"Starting {variant} ({norm_tag} norm) | seed {seed}...")
 
-    cmd = ["python", "train.py", "--seed", str(seed), "--num_episodes", str(400)]
+    cmd = [
+        sys.executable,
+        os.path.join(MULTI_RAMP_DIR, "train.py"),
+        "--seed", str(seed),
+        "--num_episodes", "500",
+    ]
     if use_replacement:
         cmd.append("--use_replacement")
     if dynamic_norm:
         cmd.append("--dynamic_norm")
 
-    subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                   cwd=os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+    subprocess.run(
+        cmd,
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        cwd=MULTI_RAMP_DIR,
+    )
     print(f"---- Finished {variant} ({norm_tag} norm) | seed {seed}.")
     return True
 

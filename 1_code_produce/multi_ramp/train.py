@@ -105,14 +105,19 @@ def train(use_replacement, seed, num_episodes, dynamic_norm):
         if episode % 10 == 0:
             torch.save(
                 agent.state_dict(),
-                os.path.join(MODELS_DIR, f"model_{file_prefix}_ep{episode}.pth"),
+                os.path.join(MODELS_DIR, f"model_{file_prefix}_seed{seed}_ep{episode}.pth"),
             )
-            with open(os.path.join(MODELS_DIR, f"state_tracker_{file_prefix}_ep{episode}.pkl"), "wb") as f:
+            with open(os.path.join(MODELS_DIR, f"state_tracker_{file_prefix}_seed{seed}_ep{episode}.pkl"), "wb") as f:
                 pickle.dump(state_tracker, f)
 
-    torch.save(agent.state_dict(), os.path.join(MODELS_DIR, f"model_{file_prefix}.pth"))
-    with open(os.path.join(MODELS_DIR, f"state_tracker_{file_prefix}.pkl"), "wb") as f:
+    # Save seed-specific artifacts so parallel multi-seed runs do not overwrite each other.
+    torch.save(agent.state_dict(), os.path.join(MODELS_DIR, f"model_{file_prefix}_seed{seed}.pth"))
+    with open(os.path.join(MODELS_DIR, f"state_tracker_{file_prefix}_seed{seed}.pkl"), "wb") as f:
         pickle.dump(state_tracker, f)
+    if seed == 42:
+        torch.save(agent.state_dict(), os.path.join(MODELS_DIR, f"model_{file_prefix}.pth"))
+        with open(os.path.join(MODELS_DIR, f"state_tracker_{file_prefix}.pkl"), "wb") as f:
+            pickle.dump(state_tracker, f)
 
     with open(os.path.join(MODELS_DIR, f"training_history_{file_prefix}_seed{seed}.pkl"), "wb") as f:
         pickle.dump({
@@ -130,7 +135,7 @@ if __name__ == "__main__":
     parser.add_argument("--use_replacement", action="store_true")
     parser.add_argument("--dynamic_norm", action="store_true")
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--num_episodes", type=int, default=100)
+    parser.add_argument("--num_episodes", type=int, default=500)
     args = parser.parse_args()
 
     random.seed(args.seed)

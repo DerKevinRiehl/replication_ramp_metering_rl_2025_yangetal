@@ -6,8 +6,7 @@ as the reference ensures that RL rewards are clearly positive when the agent
 outperforms doing nothing and negative when it makes things worse.
 
 Outputs:
-    MAX_TTS     -- 95th-percentile single-step TTS across all no-control
-                   seeds (robust upper bound, avoids single-step outliers)
+    MAX_TTS     -- maximum single-step TTS across all no-control seeds
     AVG_TTS     -- mean single-step TTS across all no-control seeds
                    (reward normalisation constant)
     STATE_MEANS / STATE_STDS -- paste into config.py
@@ -64,7 +63,9 @@ def run_calibration_episode(seed):
             i: int(action_ratios[i] * SIM_STEPS_PER_CONTROL)
             for i in range(1, NUM_RAMPS + 1)
         }
-        step_tts = env.apply_actions_and_get_tts(green_durations, SIM_STEPS_PER_CONTROL)
+        step_tts, _, _ = env.apply_actions_and_get_tts(
+            green_durations, SIM_STEPS_PER_CONTROL
+        )
 
         tts_per_step.append(step_tts)
         state_vectors.append(raw_state)
@@ -96,8 +97,7 @@ if __name__ == "__main__":
     all_tts = np.concatenate(all_tts)
     all_states = np.concatenate(all_states, axis=0)
 
-    # Use 95th-percentile as MAX_TTS to be robust against single-step spikes
-    max_tts = float(np.percentile(all_tts, 95))
+    max_tts = float(np.max(all_tts))
     avg_tts = float(np.mean(all_tts))
 
     means = np.mean(all_states, axis=0)
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     stds[stds == 0] = 1e-8
 
     print("\n--- Calibration Results ---")
-    print(f"MAX_TTS (95th-pct, no-control): {max_tts:.2f}")
+    print(f"MAX_TTS (maximum,  no-control): {max_tts:.2f}")
     print(f"AVG_TTS (mean,     no-control): {avg_tts:.2f}")
     print(f"Ratio MAX/AVG: {max_tts/avg_tts:.3f}  (single-ramp reference: 1.643)")
     print(f"\nSTATE_MEANS ({len(means)}-dim):")

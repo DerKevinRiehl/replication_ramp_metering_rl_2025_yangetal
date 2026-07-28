@@ -23,9 +23,9 @@ SUMO_BINARY = "sumo"
 SIM_END = 3600
 NUM_SIMS = 10
 
-n_demands = 5
-demand_step = 100
-base_demand = 1600
+n_demands = 6
+demand_step = 50
+base_demand = 1800
 
 main_demands = [0]*12
 

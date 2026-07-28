@@ -17,7 +17,7 @@ from runner import run_episode
 
 EVAL_SEEDS = np.arange(10)
 
-def run_evaluation(seed, target_occ=13.0):
+def run_evaluation(seed, target_occ=14.0):
     np.random.seed(seed)
     torch.manual_seed(seed)
 

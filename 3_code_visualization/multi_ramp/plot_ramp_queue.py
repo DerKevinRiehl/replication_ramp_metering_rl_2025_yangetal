@@ -11,8 +11,8 @@ from plot_utils import load_pickle, save_figure
 
 NUM_SIMS = 10
 
-demand_step = 100
-base_demand = 1600
+demand_step = 50
+base_demand = 1800
 
 
 train_history = load_pickle(os.path.join(DATA_DIR, "multi_ramp_queue_data.pkl"))
