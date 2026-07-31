@@ -1,0 +1,170 @@
+\documentclass{rescience}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{subcaption}
+\begin{document}
+\input{header.tex}
+\input{content.tex}
+
+% \newpage
+
+\hypersetup{linkcolor=black,urlcolor=darkgray}
+\renewcommand\emph[1]{{\bfseries #1}}
+\setlength\bibitemsep{0pt}
+\printbibliography
+
+% ------------------------------------------------------------
+% APPENDIX
+% ------------------------------------------------------------
+
+\newpage
+\appendix
+
+\section{Implementation Parameters}
+\label{sec:implementation_parameters}
+
+\begin{table*}[!h]
+\centering
+\caption{SUMO simulation parameters reproduced from Table~2 of~\cite{Yang2025Reinforcement}.}
+\label{tab:sumo_params}
+\begin{tabular}{lll}
+\toprule
+\textbf{Parameter} & \textbf{Value} & \textbf{Description} \\
+\midrule
+\texttt{departLane}  & best   & Lane selection at insertion \\
+\texttt{departPos}   & free   & Longitudinal position at insertion \\
+\texttt{departSpeed} & random & Initial speed at insertion \\
+\texttt{speedFactor} & 1.0    & Desired speed multiplier \\
+\texttt{speedDev}    & 0.03   & Speed-factor standard deviation \\
+\texttt{minGap}      & 2.0~m  & Minimum gap to leading vehicle \\
+\texttt{accel}       & 2.6~m/s$^2$ & Maximum acceleration \\
+\texttt{decel}       & 4.5~m/s$^2$ & Maximum deceleration \\
+\texttt{sigma}       & 0.3    & Driver imperfection \\
+\texttt{tau}         & 1.1~s  & Desired time headway \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[!h]
+\centering
+\caption{PI-ALINEA parameters used in the single-ramp and multi-ramp scenarios.}
+\label{tab:alinea_params}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Scenario / Ramp} & $k_r$ & $k_p$ & $\hat{o}$ (\%) & $C$ (veh$\cdot$h) \\
+\midrule
+Single-ramp                          &  90 & 10 & 14.0 & 1{,}930 \\
+Multi-ramp Ramp~1 (Maqun South)      & 110 & 20 & 12.3 & 2{,}540 \\
+Multi-ramp Ramp~2 (Shuangqi)         & 100 &  0 & 12.5 & 2{,}650 \\
+Multi-ramp Ramp~3 (Shiyang)          & 100 &  0 & 13.0 & 1{,}930 \\
+Multi-ramp Ramp~4 (Inner Ring South) & 100 & 20 & 13.5 & 2{,}300 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[!h]
+\centering
+\caption{PPO hyperparameters used in the replication. These values were not reported in the original study.}
+\label{tab:ppo_params}
+\begin{tabular}{lll}
+\toprule
+\textbf{Hyperparameter} & \textbf{Value used} & \textbf{Reported?} \\
+\midrule
+Optimiser & Adam & No \\
+Initial learning rate & $3 \times 10^{-4}$ & No \\
+Learning-rate schedule & Linear decay (single); constant (multi) & No \\
+Discount factor $\gamma$ & 0.99 & No \\
+GAE $\lambda$ & 0.95 & No \\
+Clip parameter $\varepsilon$ & 0.2 & No \\
+Entropy coefficient $c_e$ & 0.01 & No \\
+Value-loss coefficient $c_v$ & 0.5 & No \\
+PPO epochs per update & 4 & No \\
+Rollout structure & One episode, no mini-batch & No \\
+Parallel environments & 1 & No ($N$ unspecified) \\
+State normalisation & Fixed baseline statistics & No \\
+Actor log-std initialisation & $-0.5$ (single); $-1.0$ (multi) & No \\
+Actor output activation & Sigmoid & No \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\section{Capacity Tests and Network Configurations}
+\label{sec:appendix_capacity}
+
+Ramp demand was first tested from 1{,}800 to 2{,}600~veh$\cdot$h in increments of 100~veh$\cdot$h. The range around the breakdown point was then tested from 1{,}800 to 2{,}050~veh$\cdot$h in increments of 50~veh$\cdot$h. A breakdown was defined as the queue exceeding 50\% of maximum storage for 20 consecutive control steps.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/breakdown_probability.png}
+    \caption{Breakdown probability across tested demand levels for Ramps~1--4.}
+    \label{fig:breakdown_probability}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/scenario_3.png}
+    \includegraphics[width=\linewidth]{figures/scenario_4.png}
+    \caption{Alternative reconstructed SUMO lane configurations for Scenarios~3 and~4. Scenario~4 was used because Scenario~3 produced complete network breakdown under the baseline demand.}
+    \label{fig:network_scenarios}
+\end{figure}
+
+\section{Replication Assumptions}
+\label{sec:assumptions}
+
+The original study omits parameters and implementation details required to reproduce the experiments. The following assumptions were used:
+
+\begin{itemize}
+    \item \textbf{Virtual edge lengths:} 200~m for the upstream mainline edge and 100~m for the upstream ramp edge.
+    \item \textbf{Multi-ramp geometry:} 571~m between the Shiyang Road on-ramp and downstream off-ramp, based on satellite imagery, instead of the reported 397~m.
+    \item \textbf{Maximum ramp storage:} 84, 112, 58, and 164 vehicles for Ramps~1--4, measured using red-light steady-state simulations with zero mainline flow.
+    \item \textbf{Multi-ramp demand:} 8{,}000~veh$\cdot$h on the mainline and 1{,}400, 1{,}200, 900, and 1{,}600~veh$\cdot$h on Ramps~1--4, calibrated against the original speed heatmap.
+    \item \textbf{Multi-ramp routing:} All vehicles use a through route and leave at the downstream end of the network.
+    \item \textbf{Vehicle insertion:} Independent Bernoulli trials per lane and second approximate the macroscopic demand profiles.
+    \item \textbf{HERO thresholds:} $q_\mathrm{on}=0.5$, $q_\mathrm{off}=0.3$, and $q_\mathrm{slave}=0.2$.
+    \item \textbf{PPO architecture:} Hidden-layer width of 256 units, Sigmoid actor output, and initial log standard deviations of $-0.5$ for the single-ramp experiment and $-1.0$ for the multi-ramp experiment.
+    \item \textbf{Multi-ramp state:} Only downstream occupancy, speed, and vehicle count are used; upstream mainline features are omitted.
+    \item \textbf{State normalisation:} Fixed statistics computed from the no-control baseline are used.
+    \item \textbf{Detector speed:} The mainline and ramp free-flow speed is 27.78~m/s. Empty-detector observations are imputed with this value.
+    \item \textbf{Reward calibration:} $A_{\mathrm{TTS}}$ and $B_{\mathrm{TTS}}$ are computed from the replicated no-control baseline.
+    \item \textbf{TTS calculation:} Vehicles waiting to enter the network are included.
+    \item \textbf{Safety margin:} $\alpha=0.9$.
+    \item \textbf{Penalty factor:} $c=0.1$.
+    \item \textbf{PPO processing:} Advantages are standardised before each update and sampled actions are clamped to $[0,1]$.
+    \item \textbf{Vectorisation and episode length:} One sequential environment is used without mini-batch shuffling. Single-ramp episodes use 240 control steps; multi-ramp episodes use 320.
+    \item \textbf{Merge connection:} The acceleration-lane-to-mainline connection was removed because this produced the closest match to the reported ramp capacity.
+    \item \textbf{Internal units:} Demand and capacity values are converted from veh$\cdot$h to veh$\cdot$s.
+    \item \textbf{Training duration:} At least 500 episodes were inferred from the original figures because the paper does not report the number of episodes.
+\end{itemize}
+
+\section{State Normalisation}
+\label{sec:normalisation}
+
+The original paper states that input features are standardised but does not specify whether the statistics are updated during training. Static statistics computed from the no-control baseline and dynamically updated statistics were compared over 700 episodes and multiple random seeds. Their learning curves and final performance were statistically indistinguishable, so the static approach was used.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/standardisation_comparison.png}
+    \caption{Training performance with static and dynamic state normalisation. Solid lines show mean total reward across random seeds; shaded regions show variance.}
+    \label{fig:standardisation_comparison}
+\end{figure}
+
+\section{Additional Result Figures}
+\label{sec:appendix_results}
+
+\begin{figure*}[!h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/yang2025_fig15.png}\\[0.5em]
+    \includegraphics[width=0.8\linewidth]{figures/fig_15_rep.png}
+    \caption{Space--time speed heatmaps for the multi-ramp Experiment~1 strategies. Top: original Figure~15 from~\cite{Yang2025Reinforcement}. Bottom: replication.}
+    \label{fig:multi_ramp_fig15_rep}
+\end{figure*}
+
+\begin{figure*}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/multi_ramp_action_comparison.png}
+    \caption{Action distributions in the multi-ramp scenario. The unconstrained RL agent selects rates near zero, while the action replacement agent is forced toward one to prevent ramp spillback.}
+    \label{fig:action_distributions}
+\end{figure*}
+
+
+\end{document}
